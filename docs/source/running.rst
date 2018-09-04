@@ -92,9 +92,38 @@ Command line interface
 
 Running MRIQC on HPC clusters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 Singularity containers
 ......................
+`singularity build mriqc.simg docker://poldracklab/mriqc:0.14.2`
+
+Slurm
+.....
+If you do not feed `MEM_IN_GB=$(( SLURM_MEM_PER_NODE/1000 ))` and `SLURM_JOB_CPUS_PER_NODE` to mriqc, it may use more resources than intended. This will cause performance problems and possibly lead to termination by the slurm controller.
+     
+sample script:
+    ::
+    #!/bin/bash                                                                                                                        
+    #
+    #SBATCH -n 8            # Number of cores. 
+    #SBATCH -N 1            # Number of nodes
+    #SBATCH -t 5-13:20      # Runtime in D-HH:MM format
+    #SBATCH -p myPartition  # Partition to submit to
+    #SBATCH --mem=800000    # Memory pool for all CPUs, in MB
+     
+    # calculate slurm allocations to pass to mriqc
+    MEM_IN_GB=$(( SLURM_MEM_PER_NODE/1000 ))
+     
+    # prepare workdir in scratch
+    WD=/scratch/myUser/${SLURM_JOB_ID}
+    mkdir -p ${WD}
+     
+    printf "Working Directory = ${WD} \n"
+    printf "MEM_IN_GB = ${MEM_IN_GB} \n"
+    printf "SLURM_JOB_CPUS_PER_NODE = ${SLURM_JOB_CPUS_PER_NODE} \n"
+     
+    # run mriqc and clear out the working directory if mriqc is finishes successfully
+     
+    singularity -s exec -B <bids_dir>:/data:ro -B /scratch -B <output_dir>:/out /path/to/mriqc.simg /data /out participant --no-sub --nprocs ${SLURM_JOB_CPUS_PER_NODE} --mem_gb ${MEM_IN_GB} -w ${WD} -f && rm -r ${WD}
 
 Requesting resources
 ....................
