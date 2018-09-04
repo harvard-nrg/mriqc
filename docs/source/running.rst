@@ -101,7 +101,7 @@ Slurm
 If you do not feed `MEM_IN_GB=$(( SLURM_MEM_PER_NODE/1000 ))` and `SLURM_JOB_CPUS_PER_NODE` to mriqc, it may use more resources than intended. This will cause performance problems and possibly lead to termination by the slurm controller.
      
 sample script:
-    ::
+    .. raw:: bash
     #!/bin/bash                                                                                                                        
     #
     #SBATCH -n 8            # Number of cores. 
