@@ -102,7 +102,7 @@ If you do not feed `MEM_IN_GB=$(( SLURM_MEM_PER_NODE/1000 ))` and `SLURM_JOB_CPU
      
 sample script:
 
-.. code-block:: bash
+.. 
     #!/bin/bash                                                                                                                        
     #
     #SBATCH -n 8            # Number of cores. 
