@@ -121,7 +121,7 @@ sample script: ::
     printf "MEM_IN_GB = ${MEM_IN_GB} \n"
     printf "SLURM_JOB_CPUS_PER_NODE = ${SLURM_JOB_CPUS_PER_NODE} \n"
      
-    # run mriqc and clear out the working directory if mriqc is finishes successfully
+    # run mriqc and clear out the working directory if mriqc finishes successfully
      
     singularity -s exec -B <bids_dir>:/data:ro -B /scratch -B <output_dir>:/out /path/to/mriqc.simg /data /out participant --no-sub --nprocs ${SLURM_JOB_CPUS_PER_NODE} --mem_gb ${MEM_IN_GB} -w ${WD} -f && rm -r ${WD}
 
